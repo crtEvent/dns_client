@@ -48,7 +48,7 @@ naver.com
    3. 배열 안의 각 문자열을 byte로 변환한다.
    4. 변환된 byte 배열을 이용하여 byte 배열 형태의 요청 메시지를 만들어 반환한다.
 3. DnsResolver
-   1. RequestParser가 반환한 요청 메시지로 DNS 서버에 질의를 요청한다.
+   1. RequestGenerator가 반환한 요청 메시지로 DNS 서버에 질의를 요청한다.
    2. 응답 메시지를 byte 배열 형태로 받아서 반환한다.
 4. ResponseParser
    1. DnsResolver가 반환한 응답 메시지를 파싱하여 IP주소 목록을 ArrayList로 반환한다.
