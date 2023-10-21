@@ -1,4 +1,4 @@
-package org.example.parser;
+package org.example.message;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class ResponseParser {
 
-	public ArrayList<String> parseResponse(byte[] requestPacket, byte[] response) throws UnknownHostException {
+	public ArrayList<String> extractIpAddresses(byte[] requestPacket, byte[] response) throws UnknownHostException {
 		var ipList = new ArrayList<String>();
 
 		var index = requestPacket.length;

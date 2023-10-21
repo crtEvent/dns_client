@@ -1,32 +1,32 @@
-package org.example.parser;
+package org.example.message;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestParser {
+public class RequestGenerator {
 
 	private static final ArrayList<Byte> HEADER_SECTION;
 	private static final ArrayList<Byte> QTYPE;
 	private static final ArrayList<Byte> QCLASS;
 
 	static {
-		HEADER_SECTION = new ArrayList<Byte>(List.of(
-			(byte) 0x00, (byte) 0x01, // ID
-			(byte) 0x00, (byte) 0x00, // FLAG
-			(byte) 0x00, (byte) 0x01, // QDCOUNT
-			(byte) 0x00, (byte) 0x00, // ANCOUNT
-			(byte) 0x00, (byte) 0x00, // NSCOUNT
-			(byte) 0x00, (byte) 0x00  // ARCOUNT
+		HEADER_SECTION = new ArrayList<>(List.of(
+			(byte)0x00, (byte)0x01, // ID
+			(byte)0x00, (byte)0x00, // FLAG
+			(byte)0x00, (byte)0x01, // QDCOUNT
+			(byte)0x00, (byte)0x00, // ANCOUNT
+			(byte)0x00, (byte)0x00, // NSCOUNT
+			(byte)0x00, (byte)0x00  // ARCOUNT
 		));
-		QTYPE = new ArrayList<Byte>(List.of(
+		QTYPE = new ArrayList<>(List.of(
 			(byte) 0x00, (byte) 0x01) // QTYPE  : A(1)
 		);
-		QCLASS = new ArrayList<Byte>(List.of(
+		QCLASS = new ArrayList<>(List.of(
 			(byte) 0x00, (byte) 0x01) // QCLASS : IN(1) the Internet
 		);
 	}
 
-	public byte[] createRequestPacket(String hostName) {
+	public byte[] generateRequestPacket(String hostName) {
 		var qname = parseHostNameToQName(hostName);
 
 		var requestMessage = new ArrayList<Byte>();
