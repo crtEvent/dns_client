@@ -1,13 +1,10 @@
 package org.example;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.example.message.RequestMessage;
-import org.example.message.ResponseParser;
-import org.example.view.DebugView;
+import org.example.message.ResponseMessage;
 import org.example.view.InputView;
-import org.example.view.OutputView;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
@@ -19,17 +16,19 @@ public class Main {
 		// new OutputView().printIpList(ipList);
 
 		var commands = new InputView().inputCommand();
-		var requestPacket = RequestMessage.generate(1, commands);
+		var requestMessage = RequestMessage.generate(1, commands);
 		System.out.println("1. -----------------------");
 		//DebugView.printBytes(requestPacket.getBytes());
-		System.out.println(requestPacket.toString());
+		System.out.println(requestMessage.toString());
 		System.out.println("-----------------------");
 		System.out.println("-----------------------");
 		System.out.println("-----------------------");
 		System.out.println("2. -----------------------");
-		var response = new DnsResolver().query(requestPacket.getBytes());
-		DebugView.printDatagramPacket(response);
-		var ipList = new ResponseParser().extractIpAddresses(requestPacket.getBytes(), response);
-		new OutputView().printIpList(ipList);
+		var response = new DnsResolver().query(requestMessage);
+		var responseMessage = ResponseMessage.generateBy(response);
+		System.out.println(responseMessage.toString());
+		//DebugView.printDatagramPacket(response);
+		//var ipList = new ResponseParser().extractIpAddresses(requestMessage.getBytes(), response);
+		//new OutputView().printIpList(ipList);
 	}
 }

@@ -52,6 +52,27 @@ public class FLAG {
 		);
 	}
 
+	public static FLAG generateByTwoBytes(byte firstByte, byte secondByte) {
+		var firstBinary = Integer.toBinaryString(firstByte & 0xFF);
+		var secondBinary = Integer.toBinaryString(secondByte & 0xFF);
+
+		firstBinary = String.format("%8s", firstBinary).replace(' ', '0');
+		secondBinary = String.format("%8s", secondBinary).replace(' ', '0');
+
+		var fullBinary = firstBinary + secondBinary;
+
+		return new FLAG(
+			QR.generateBy(fullBinary.charAt(0)),
+			OPCODE.generateBy(fullBinary.substring(1, 5)),
+			AA.generateBy(fullBinary.charAt(5)),
+			TC.generateBy(fullBinary.charAt(6)),
+			RD.generateBy(fullBinary.charAt(7)),
+			RA.generateBy(fullBinary.charAt(8)),
+			Z.FALSE,
+			RCODE.generateBy(fullBinary.substring(12, 16))
+		);
+	}
+
 	public String convertBinary() {
 
 		return qr.getSign()

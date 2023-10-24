@@ -38,5 +38,9 @@ public class COUNT {
 		return ByteConvertor.intToTwoBytes(count);
 	}
 
+	public static COUNT generateByTwoBytes(byte firstByte, byte secondByte) {
+		int id = ((firstByte & 0xFF) << 8) | (secondByte & 0xFF);
 
+		return new COUNT(id);
+	}
 }

@@ -49,4 +49,16 @@ public enum RCODE {
 	public String getCode() {
 		return code;
 	}
+
+	public static RCODE generateBy(String fourBitBinary) {
+		return switch (fourBitBinary) {
+			case "0000" -> RCODE.NO_ERROR_CONDITION;
+			case "0001" -> RCODE.FORMAT_ERROR;
+			case "0010" -> RCODE.SERVER_FAILURE;
+			case "0011" -> RCODE.NAME_ERROR;
+			case "0100" -> RCODE.NOT_IMPLEMENTED;
+			case "0101" -> RCODE.REFUSED;
+			default -> throw new IllegalArgumentException("잘못된 binary 값이 들어왔습니다.");
+		};
+	}
 }

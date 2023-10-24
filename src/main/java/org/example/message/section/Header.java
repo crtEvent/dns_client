@@ -1,6 +1,8 @@
 package org.example.message.section;
 
 import java.io.ByteArrayOutputStream;
+import java.net.DatagramPacket;
+import java.util.Arrays;
 
 import org.example.message.section.header.COUNT;
 import org.example.message.section.header.FLAG;
@@ -58,16 +60,25 @@ public class Header {
 		);
 	}
 
+	public static Header generateBy(DatagramPacket receivedPacket) {
+		var headerData = Arrays.copyOfRange(receivedPacket.getData(), 0, 12);
+
+		return new Header(
+			ID.generateByTwoBytes(headerData[0], headerData[1]),
+			FLAG.generateByTwoBytes(headerData[2], headerData[3]),
+			COUNT.generateByTwoBytes(headerData[4], headerData[5]),
+			COUNT.generateByTwoBytes(headerData[6], headerData[7]),
+			COUNT.generateByTwoBytes(headerData[8], headerData[9]),
+			COUNT.generateByTwoBytes(headerData[10], headerData[11])
+		);
+	}
+
 	public byte[] getBytes() {
 		return bytes;
 	}
 
-	public boolean isRequest() {
-		return flag.isRequest();
-	}
-
-	public boolean isResponse() {
-		return flag.isResponse();
+	public int getLength() {
+		return bytes.length;
 	}
 
 	private byte[] convertToBytes() {

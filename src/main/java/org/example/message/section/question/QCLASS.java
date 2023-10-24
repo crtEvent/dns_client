@@ -1,5 +1,7 @@
 package org.example.message.section.question;
 
+import java.util.Arrays;
+
 /**
  * a two octet code that specifies the class of the query.
  * For example, the QCLASS field is IN for the Internet.
@@ -22,6 +24,9 @@ package org.example.message.section.question;
  */
 public enum QCLASS {
 	IN(new byte[]{0x00, 0x01}),
+	CS(new byte[]{0x00, 0x02}),
+	CH(new byte[]{0x00, 0x03}),
+	HS(new byte[]{0x00, 0x04}),
 	ASTERISK(new byte[]{0x00, (byte) 0xff});
 
 	private final byte[] code;
@@ -32,5 +37,14 @@ public enum QCLASS {
 
 	public byte[] getBytes() {
 		return code;
+	}
+
+	public static QCLASS generateByBytes(byte[] receivedBytes) {
+		for (QCLASS qClass : QCLASS.values()) {
+			if(Arrays.equals(qClass.getBytes(), receivedBytes)) {
+				return qClass;
+			}
+		}
+		throw new IllegalArgumentException("잘못된 bytes 값이 들어왔습니다. QCLASS으로 변환할 수 없습니다.");
 	}
 }

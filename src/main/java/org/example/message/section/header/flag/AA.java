@@ -22,4 +22,12 @@ public enum AA {
 	public char getSign() {
 		return sign;
 	}
+
+	public static AA generateBy(char oneBitBinary) {
+		return switch (oneBitBinary) {
+			case '0' -> AA.FALSE;
+			case '1' -> AA.TRUE;
+			default -> throw new IllegalArgumentException("잘못된 binary 값이 들어왔습니다.");
+		};
+	}
 }

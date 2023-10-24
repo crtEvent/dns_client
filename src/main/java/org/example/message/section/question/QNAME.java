@@ -1,6 +1,7 @@
 package org.example.message.section.question;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 
 /**
  * a domain name represented as a sequence of labels, where
@@ -20,14 +21,20 @@ public class QNAME {
 	public static QNAME generateByHostName(String hostName) {
 		var hostParts = hostName.split("\\.");
 
+		var bytesLength = 1;
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		for (var part : hostParts) {
 			outputStream.write(new byte[]{(byte) part.length()}, 0, 1);
 			outputStream.write(part.getBytes(), 0, part.getBytes().length);
+			bytesLength += part.getBytes().length + 1;
 		}
 		outputStream.write(new byte[]{0x00}, 0, 1);
 
-		return new QNAME(outputStream.toByteArray());
+		return new QNAME(Arrays.copyOfRange(outputStream.toByteArray(), 0, bytesLength));
+	}
+
+	public static QNAME generateByBytes(byte[] bytes) {
+		return new QNAME(bytes);
 	}
 
 	public byte[] getBytes() {

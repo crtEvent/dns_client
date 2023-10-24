@@ -1,9 +1,8 @@
 package org.example.message.section;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.net.DatagramPacket;
+import java.util.Arrays;
 
 import org.example.message.section.question.QCLASS;
 import org.example.message.section.question.QNAME;
@@ -28,6 +27,9 @@ import org.example.message.section.question.QTYPE;
  * </pre>
  */
 public class Question {
+
+	private static final int START_INDEX_OF_QUESTION_SECTION = 12;
+
 	private final QNAME qName;
 	private final QTYPE qType;
 	private final QCLASS qClass;
@@ -65,8 +67,55 @@ public class Question {
 		);
 	}
 
+	public static Question generateBy(DatagramPacket receivedPacket) {
+		var receivedBytes = receivedPacket.getData();
+		var qName = QNAME.generateByBytes(extractQNameBytes(receivedBytes));
+		var qType = QTYPE.generateByBytes(extractQTypeBytes(receivedBytes, qName));
+		var qClass = QCLASS.generateByBytes(extractQClassBytes(receivedBytes, qName));
+
+		return new Question(
+			qName,
+			qType,
+			qClass
+		);
+	}
+
+	private static byte[] extractQNameBytes(byte[] receivedBytes) {
+		var bytesLength = receivedBytes.length;
+		var endIndex = START_INDEX_OF_QUESTION_SECTION;
+		while (endIndex < bytesLength && receivedBytes[endIndex] != 0x00) {
+			endIndex++;
+		}
+		endIndex++;
+
+		if (endIndex < bytesLength) {
+			return Arrays.copyOfRange(receivedBytes, START_INDEX_OF_QUESTION_SECTION, endIndex);
+		}
+		throw new IllegalArgumentException("잘못된 입력값이 들어왔습니다. QNAME을 찾을 수 없습니다.");
+	}
+
+	private static byte[] extractQTypeBytes(byte[] receivedBytes, QNAME qName) {
+		var startIndex = START_INDEX_OF_QUESTION_SECTION + qName.length();
+		if (startIndex + 2 < receivedBytes.length) {
+			return Arrays.copyOfRange(receivedBytes, startIndex, startIndex + 2);
+		}
+		throw new IllegalArgumentException("잘못된 입력값이 들어왔습니다. QTYPE을 찾을 수 없습니다.");
+	}
+
+	private static byte[] extractQClassBytes(byte[] receivedBytes, QNAME qName) {
+		var startIndex = START_INDEX_OF_QUESTION_SECTION + qName.length() + 2;
+		if (startIndex + 2 < receivedBytes.length) {
+			return Arrays.copyOfRange(receivedBytes, startIndex, startIndex + 2);
+		}
+		throw new IllegalArgumentException("잘못된 입력값이 들어왔습니다. QCLASS를 찾을 수 없습니다.");
+	}
+
 	public byte[] getBytes() {
 		return bytes;
+	}
+
+	public int getLength() {
+		return bytes.length;
 	}
 
 	private byte[] convertToBytes() {

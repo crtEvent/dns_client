@@ -23,6 +23,12 @@ public class ID {
 		return new ID(id);
 	}
 
+	public static ID generateByTwoBytes(byte firstByte, byte secondByte) {
+		int id = ((firstByte & 0xFF) << 8) | (secondByte & 0xFF);
+
+		return new ID(id);
+	}
+
 	public byte[] convertToTwoBytes() {
 		return ByteConvertor.intToTwoBytes(id);
 	}

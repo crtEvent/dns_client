@@ -45,6 +45,6 @@ public class RequestMessage {
 
 	@Override
 	public String toString() {
-		return header.toString() + "\n" + question.toString();
+		return "[▶▶] Request Message\n" + header.toString() + "\n" + question.toString();
 	}
 }

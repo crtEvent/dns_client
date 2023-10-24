@@ -1,11 +1,13 @@
 package org.example.message.section.question;
 
+import java.util.Arrays;
+
 /**
  * a two octet code which specifies the type of the query.
  * The values for this field include all codes valid for a
  * TYPE field, together with some more general codes which
  * can match more than one type of RR.
- *<br><br>
+ * <br><br>
  * TYPE fields are used in resource records.  Note that these types are a
  * subset of QTYPEs.
  * <pre>
@@ -34,6 +36,15 @@ public enum QTYPE {
 
 	public byte[] getBytes() {
 		return code;
+	}
+
+	public static QTYPE generateByBytes(byte[] receivedBytes) {
+		for (QTYPE qType : QTYPE.values()) {
+			if(Arrays.equals(qType.getBytes(), receivedBytes)) {
+				return qType;
+			}
+		}
+		throw new IllegalArgumentException("잘못된 bytes 값이 들어왔습니다. QTYPE으로 변환할 수 없습니다.");
 	}
 
 	public static QTYPE covertStringToQTYPE(String qType) {

@@ -1,10 +1,9 @@
 package org.example.message.section.header.flag;
 
 /**
- * Recursion Desired - this bit may be set in a query and
- * is copied into the response.  If RD is set, it directs
- * the name server to pursue the query recursively.
- * Recursive query support is optional.
+ * Recursion Available - this be is set or cleared in a
+ * response, and denotes whether recursive query support is
+ * available in the name server.
  */
 public enum RA {
 	TRUE('1'), FALSE('0');
@@ -17,5 +16,13 @@ public enum RA {
 
 	public char getSign() {
 		return sign;
+	}
+
+	public static RA generateBy(char oneBitBinary) {
+		return switch (oneBitBinary) {
+			case '0' -> RA.FALSE;
+			case '1' -> RA.TRUE;
+			default -> throw new IllegalArgumentException("잘못된 binary 값이 들어왔습니다.");
+		};
 	}
 }

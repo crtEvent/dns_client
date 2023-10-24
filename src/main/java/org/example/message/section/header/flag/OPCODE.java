@@ -13,7 +13,9 @@ package org.example.message.section.header.flag;
  * </pre>
  */
 public enum OPCODE {
-	QUERY("0000");
+	QUERY("0000"),
+	I_QUERY("0001"),
+	STATUS("0010");
 
 	private final String opCode;
 
@@ -23,5 +25,14 @@ public enum OPCODE {
 
 	public String getOpCode() {
 		return opCode;
+	}
+
+	public static OPCODE generateBy(String fourBitBinary) {
+		return switch (fourBitBinary) {
+			case "0000" -> OPCODE.QUERY;
+			case "0001" -> OPCODE.I_QUERY;
+			case "0010" -> OPCODE.STATUS;
+			default -> throw new IllegalArgumentException("잘못된 binary 값이 들어왔습니다.");
+		};
 	}
 }
